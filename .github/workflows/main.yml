@@ -1,0 +1,22 @@
+name: Java CI
+
+on: [push, pull_request] # Tự động chạy mỗi khi bạn nộp bài (push)
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4 # Bước 1: Robot lấy code của bạn về
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+    - name: Build and Test # Bước 2: Robot tự chạy lệnh mvn package (bao gồm cả Test)
+      run: mvn clean package
+    - name: Save Artifact # Bước 3: Robot cất file .jar vào kho để thầy kiểm tra
+      uses: actions/upload-artifact@v4
+      with:
+        name: BankSystem-Jar
+        path: target/*.jar
